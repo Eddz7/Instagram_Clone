@@ -9,6 +9,7 @@ This repository contains an entirely responsive clone of the Instagram app that 
 - Post creation/deletion
 - Follow/unfollow functionality
 - Display user posts
+- Comment functionality
 - Follow/following count
 - Sign out
 - Updates in real time
