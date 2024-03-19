@@ -6,7 +6,7 @@ This repository contains an entirely responsive clone of the Instagram app that 
 
 - Responsive UI
 - Email and password authentication
-- Post creation
+- Post creation/deletion
 - Follow/unfollow functionality
 - Display user posts
 - Follow/following count
