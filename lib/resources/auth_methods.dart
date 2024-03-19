@@ -5,14 +5,15 @@ import 'package:flutter/material.dart';
 import 'package:instagram_clone/models/user.dart' as model;
 import 'package:instagram_clone/resources/storage_methods.dart';
 
-class AuthMethods{
+class AuthMethods {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
   Future<model.User> getUserDetails() async {
     User currentUser = _auth.currentUser!;
 
-    DocumentSnapshot snap = await _firestore.collection('users').doc(currentUser.uid).get();
+    DocumentSnapshot snap =
+        await _firestore.collection('users').doc(currentUser.uid).get();
 
     return model.User.fromSnap(snap);
   }
@@ -27,11 +28,17 @@ class AuthMethods{
   }) async {
     String res = "Some error occured";
     try {
-      if(email.isNotEmpty || password.isNotEmpty || username.isNotEmpty || bio.isNotEmpty || file != null){
+      if (email.isNotEmpty ||
+          password.isNotEmpty ||
+          username.isNotEmpty ||
+          bio.isNotEmpty ||
+          file != null) {
         // register user
-        UserCredential cred = await _auth.createUserWithEmailAndPassword(email: email, password: password);
+        UserCredential cred = await _auth.createUserWithEmailAndPassword(
+            email: email, password: password);
 
-        String photoUrl = await StorageMethods().uploadImageToStorage('profilePics', file, false);
+        String photoUrl = await StorageMethods()
+            .uploadImageToStorage('profilePics', file, false);
 
         // add user to our database
 
@@ -45,18 +52,18 @@ class AuthMethods{
           followers: [],
         );
 
-        await _firestore.collection('users').doc(cred.user!.uid).set(user.toJson(),);
+        await _firestore.collection('users').doc(cred.user!.uid).set(
+              user.toJson(),
+            );
         res = "success";
       }
-    } on FirebaseAuthException catch(err) {
-      if(err.code == 'invalid-email') {
+    } on FirebaseAuthException catch (err) {
+      if (err.code == 'invalid-email') {
         res = 'The email is badly formatted.';
       } else if (err.code == 'weak-password') {
         res = 'Your password should be at least 6 characters';
       }
-    }
-    
-    catch(err) {
+    } catch (err) {
       res = err.toString();
     }
     return res;
@@ -70,15 +77,20 @@ class AuthMethods{
     String res = "Some error occured";
 
     try {
-      if(email.isNotEmpty || password.isNotEmpty) {
-        await _auth.signInWithEmailAndPassword(email: email, password: password);
+      if (email.isNotEmpty || password.isNotEmpty) {
+        await _auth.signInWithEmailAndPassword(
+            email: email, password: password);
         res = "success";
       } else {
         res = "Please enter all the fields";
       }
-    } catch(err) {
+    } catch (err) {
       res = err.toString();
     }
     return res;
+  }
+
+  Future<void> signOut() async {
+    await _auth.signOut();
   }
 }

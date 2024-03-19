@@ -69,7 +69,7 @@ class _PostCardState extends State<PostCard> {
       // boundary needed for web
       decoration: BoxDecoration(
         border: Border.all(
-          color: width > webScreenSize ? secondaryColor : mobileBackgroundColor,
+          color: width > webScreenSize ? webBackgroundColor : mobileBackgroundColor,
         ),
         color: mobileBackgroundColor,
       ),

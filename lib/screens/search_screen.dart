@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import 'package:instagram_clone/screens/profile_screen.dart';
 import 'package:instagram_clone/utils/colors.dart';
 
 class SearchScreen extends StatefulWidget {
@@ -13,6 +14,7 @@ class SearchScreen extends StatefulWidget {
 class _SearchScreenState extends State<SearchScreen> {
   final TextEditingController searchController = TextEditingController();
   bool isShowUsers = false;
+  bool isLoading = false;
 
   @override
   Widget build(BuildContext context) {
@@ -42,31 +44,41 @@ class _SearchScreenState extends State<SearchScreen> {
                   )
                   .get(),
               builder: (context, snapshot) {
-                if (!snapshot.hasData) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  // Display circular progress indicator while waiting for data
                   return const Center(
                     child: CircularProgressIndicator(),
                   );
                 }
 
-            return ListView.builder(
-              itemCount: (snapshot.data! as dynamic).docs.length,
-              itemBuilder: (context, index) {
-                return ListTile(
-                  leading: CircleAvatar(
-                    backgroundImage: NetworkImage(
-                      // this causes error, it is caused by a single user which does not have a photoUrl field.
-                      (snapshot.data! as dynamic).docs[index]['photoUrl'],
-                    ),
-                    radius: 16,
-                  ),
-                  title: Text(
-                    (snapshot.data! as dynamic).docs[index]['username'],
-                  ),
+                return ListView.builder(
+                  itemCount: (snapshot.data! as dynamic).docs.length,
+                  itemBuilder: (context, index) {
+                    return InkWell(
+                      onTap: () => Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => ProfileScreen(
+                            uid: (snapshot.data! as dynamic).docs[index]['uid'],
+                          ),
+                        ),
+                      ),
+                      child: ListTile(
+                        leading: CircleAvatar(
+                          backgroundImage: NetworkImage(
+                            (snapshot.data! as dynamic).docs[index]['photoUrl'],
+                          ),
+                          radius: 16,
+                        ),
+                        title: Text(
+                          (snapshot.data! as dynamic).docs[index]['username'],
+                        ),
+                      ),
+                    );
+                  },
                 );
               },
-            );
-          },
-          ): FutureBuilder(
+            )
+          : FutureBuilder(
               future: FirebaseFirestore.instance
                   .collection('posts')
                   .orderBy('datePublished')
