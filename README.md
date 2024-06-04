@@ -1,6 +1,7 @@
-# Instagram Clone
-
-This repository contains an entirely responsive clone of the Instagram app that works on Android and Web. It was developed with the purpose of gaining experience in full-stack development and app development in general.
+# Social Media App
+<img src="https://github.com/Eddz7/social-media-app/assets/102757712/c78b66dc-164d-4f59-9f45-3ac666c6f5b2" width="700">
+<img src="https://github.com/Eddz7/social-media-app/assets/102757712/33a89350-8213-42fa-afa9-773f6d4d993f" width="700">
+<img src="https://github.com/Eddz7/social-media-app/assets/102757712/6582420a-ba07-4544-958f-f766f1c80654"  width="700">
 
 ## Features
 
